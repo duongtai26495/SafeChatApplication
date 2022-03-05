@@ -25,7 +25,6 @@ const Signup = ({ navigation, route }) => {
     })
   }, [isError])
 
-  const auth = getAuth()
 
   const [errorName, setErrorName] = useState(false)
   const [errorPhoneNum, setErrorPhoneNum] = useState(false)
