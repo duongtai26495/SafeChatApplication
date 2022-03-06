@@ -135,7 +135,7 @@ const Signup = ({ navigation, route }) => {
         "isLogin": true,
       }).then(() => {
         console.log("Insert new user success! UserID: " + UID)
-        navigation.dispatch(StackActions.replace(NAVI_STRING.HOME))
+        navigation.dispatch(StackActions.replace(NAVI_STRING.PROFILEPAGE))
         setLoading(false)
       }).catch((err) => {
         console.log("An error: " + err)

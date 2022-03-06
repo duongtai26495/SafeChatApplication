@@ -18,16 +18,13 @@ const Home = ({navigation, route}) => {
         console.log("User logged in: "+uid)
       }else{
         console.log("User unlogin!");
-        navigation.dispatch(StackActions.replace(NAVI_STRING.SIGNIN))
       }
     })
   }
 
   const signOut = () =>{
     const auth = getAuth()
-    auth.signOut().then(() => {
-      navigation.dispatch(StackActions.replace(NAVI_STRING.SIGNIN))
-    })
+    auth.signOut()
   }
 
   useEffect(()=>{
@@ -47,11 +44,7 @@ const Home = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={main_styles.container}>
-      <SolidBgButton
-     active={()=>{signOut()}}
-     backgroundSolidColor={Colors.PRIMARY}
-     titleButton={Authen_String.SIGNOUT}
-     colorText={Colors.DARK}/>
+     
     </SafeAreaView>
   )
 }

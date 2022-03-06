@@ -89,7 +89,7 @@ const Signin = ({ navigation, route }) => {
         "isLogin": true
       }).then(() => {
         console.log("Update info user success! UserID: " + UID)
-        navigation.dispatch(StackActions.replace(NAVI_STRING.HOME))
+        navigation.dispatch(StackActions.replace(NAVI_STRING.PROFILEPAGE))
         setLoading(false)
       }).catch((err) => {
         console.log("An error: " + err)

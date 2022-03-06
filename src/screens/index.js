@@ -1,3 +1,10 @@
 export {default as Home} from '../screens/Home/Home'
 export {default as Signin} from '../screens/Signin/Signin'
 export {default as Signup} from '../screens/Signup/Signup'
+export {default as Setting} from '../screens/Setting/Setting'
+export {default as Profile} from '../screens/Profile/Profile'
+export {default as Friends} from '../screens/Friends/Friends'
+export {default as Chat} from '../screens/Chat/Chat'
+export {default as InfoChat} from '../screens/Chat/InfoChat'
+export {default as FriendInfo} from '../screens/Friends/FriendInfo'
+
