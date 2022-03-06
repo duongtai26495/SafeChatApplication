@@ -2,6 +2,7 @@ export default ({
     AUTHENTICATION      :   'Authentication',
     SIGNIN              :   'Sign In',
     SIGNUP              :   'Sign Up',
+    SIGNOUT             :   'Sign Out',
     REGISTER            :   'Register',
     DONE                :   'Done',
     GO                  :   'Go',
@@ -21,8 +22,10 @@ export default ({
     NEEDHELP            :   'Need help?',
     WELCOMEBACK         :   'Welcome Back!',
     CREATEACCOUNT       :   'Create Account',
-    
-    REQUIRED_NAME      :   'First name and last name is required',
+    HAVEANACCOUNT       :   'Have an account? Logn in now!',
+    NOACCOUNT           :   'No account? Join now!',
+
+    REQUIRED_NAME       :   'First name and last name is required',
     REQUIRED_PHONE      :   'Phone number is required',
     REQUIRED_MAILADDR   :   'Maill address is required',
     REQUIRED_PASSWORD   :   'Password is required',

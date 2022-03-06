@@ -41,7 +41,23 @@ const main_styles = StyleSheet.create({
         fontSize:10,
         paddingStart:5,
         flex:1,
-    }
+    },
+    indicator: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 100,
+      },
+      stopIndicator: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+      },
+      tvNavigation:{
+        color:Colors.DARK,
+        alignSelf:'flex-end'
+      }
 })
 
 export default main_styles

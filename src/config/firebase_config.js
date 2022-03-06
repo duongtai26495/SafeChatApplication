@@ -6,6 +6,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyBM3kbKXe-0GI5i1WBOQFU04LU-a8nGVNk",
   authDomain: "safe-chat-a9024.firebaseapp.com",
+  databaseURL: "https://safe-chat-a9024-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "safe-chat-a9024",
   storageBucket: "safe-chat-a9024.appspot.com",
   messagingSenderId: "478638407509",

@@ -6,11 +6,34 @@ import Authen_String from '../../constants/Authen_String'
 import firebase_config from '../../config/firebase_config'
 import SolidBgButton from '../../components/Button/SolidBgButton'
 import Colors from '../../assets/colors/Color'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { StackActions } from '@react-navigation/native'
 const Home = ({navigation, route}) => {
+
+  const checkLoginState = () =>{
+    const auth = getAuth()
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        const uid = user.uid
+        console.log("User logged in: "+uid)
+      }else{
+        console.log("User unlogin!");
+        navigation.dispatch(StackActions.replace(NAVI_STRING.SIGNIN))
+      }
+    })
+  }
+
+  const signOut = () =>{
+    const auth = getAuth()
+    auth.signOut().then(() => {
+      navigation.dispatch(StackActions.replace(NAVI_STRING.SIGNIN))
+    })
+  }
 
   useEffect(()=>{
     if(firebase_config){
       console.log("Connected")
+      checkLoginState()
     }else{
       console.log("Unconnect")
     }
@@ -25,9 +48,9 @@ const Home = ({navigation, route}) => {
   return (
     <SafeAreaView style={main_styles.container}>
       <SolidBgButton
-     active={()=>{goToSignIn()}}
+     active={()=>{signOut()}}
      backgroundSolidColor={Colors.PRIMARY}
-     titleButton={Authen_String.SIGNIN}
+     titleButton={Authen_String.SIGNOUT}
      colorText={Colors.DARK}/>
     </SafeAreaView>
   )

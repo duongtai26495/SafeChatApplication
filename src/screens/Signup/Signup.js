@@ -1,11 +1,14 @@
-import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native'
 import React, { useState, useEffect, useRef, Component } from 'react'
 import IMAGESOURCE from '../../constants/Image_Source_Url'
 import main_styles from '../../assets/styles/main_styles'
 import Authen_String from '../../constants/Authen_String'
 import Colors from '../../assets/colors/Color'
+import NAVI_STRING from '../../constants/Navigate_String'
+import { StackActions } from '@react-navigation/native'
 import SolidBgButton from '../../components/Button/SolidBgButton'
-import {getAuth} from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { getDatabase, ref, push, set } from "firebase/database";
 const Signup = ({ navigation, route }) => {
 
   const [fName, setFName] = useState("")
@@ -20,18 +23,18 @@ const Signup = ({ navigation, route }) => {
   const PlaceholderColor = () => Colors.BLACK_TRANSP_6
   useEffect(() => {
     validateForm()
-    return (()=>{
-      
+    return (() => {
     })
-  }, [isError])
+  }, [isError, fName, lName, phoneNumber, mailAddress, password, cPassword])
 
-
+  const auth = getAuth()
   const [errorName, setErrorName] = useState(false)
   const [errorPhoneNum, setErrorPhoneNum] = useState(false)
   const [errorMaillAddr, setErrorMaillAddr] = useState(false)
   const [errorPassword, setErrorPassword] = useState(false)
   const [errorCpassword, setErrorCpassword] = useState(false)
   const [errPwNotMatch, setErrPwNotMatch] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   const lNameRef = useRef()
   const phoneRef = useRef()
@@ -91,18 +94,67 @@ const Signup = ({ navigation, route }) => {
 
   }
 
+  const goToLogin = () => {
+    navigation.dispatch(StackActions.replace(NAVI_STRING.SIGNIN))
+  }
 
   const submitSignUp = () => {
-    if(!isError){
-      console.log("VALIDATE OK")
-    }else{
+    validateForm()
+    if (!isError) {
+      createAccountByEmail()
+    } else {
       console.log("VALIDATE NOT OK")
+    }
+
+  }
+
+  const createAccountByEmail = () => {
+    setLoading(true)
+    createUserWithEmailAndPassword(auth, mailAddress, password)
+      .then(() => {
+        updateInfoUser()
+      }).catch((err) => {
+        console.log("An error create: " + err)
+        setLoading(false)
+      });
+  }
+
+  const updateInfoUser = async () => {
+    const auth = getAuth()
+    const thisUser = auth.currentUser
+    const UID = thisUser.uid
+    const db = getDatabase()
+    if (UID !== null) {
+      const Ref = ref(db, "Users/Info/" + UID + "/")
+      await set(Ref, {
+        "fName": fName,
+        "lName": lName,
+        "phoneNumber": phoneNumber,
+        "maillAddress": mailAddress,
+        "uid": UID,
+        "isLogin": true,
+      }).then(() => {
+        console.log("Insert new user success! UserID: " + UID)
+        navigation.dispatch(StackActions.replace(NAVI_STRING.HOME))
+        setLoading(false)
+      }).catch((err) => {
+        console.log("An error: " + err)
+        setLoading(false)
+      });
     }
 
   }
 
   return (
     <SafeAreaView>
+      <ActivityIndicator
+        size={40}
+        animationDuration={1500}
+        color={Colors.SECONDARY}
+        animating={isLoading ? true : false}
+        style={isLoading ? main_styles.indicator : main_styles.stopIndicator}
+        hidesWhenStopped={true} />
+
       <ScrollView>
         <View style={main_styles.viewAuthen}>
           <Image source={IMAGESOURCE.LOGO_CYCLER} style={main_styles.logoAuthen} />
@@ -194,14 +246,19 @@ const Signup = ({ navigation, route }) => {
           {errPwNotMatch ?
             <Text style={main_styles.errorWar}>{Authen_String.MATCH_PW}</Text>
             : null}
-
-          <SolidBgButton
-            ref={goRef}
-            marginV={15}
-            active={() => { submitSignUp() }}
-            backgroundSolidColor={Colors.PRIMARY}
-            titleButton={Authen_String.GO.toUpperCase()}
-            colorText={Colors.DARK} />
+          <TouchableOpacity
+            ref={goRef}>
+            <SolidBgButton
+              ref={goRef}
+              marginV={15}
+              active={() => { submitSignUp() }}
+              backgroundSolidColor={Colors.PRIMARY}
+              titleButton={Authen_String.GO.toUpperCase()}
+              colorText={Colors.DARK} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { goToLogin() }}>
+            <Text style={main_styles.tvNavigation}>{Authen_String.HAVEANACCOUNT}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
