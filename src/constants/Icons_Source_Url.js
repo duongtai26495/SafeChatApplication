@@ -9,4 +9,10 @@ export default {
     DONE_BLACK: require('../assets/icons/done_black.png'),
     PW: require('../assets/icons/pw.png'),
     ABOUT   :   require('../assets/icons/about.png'),
+    CHANGEIMAGE :    require('../assets/icons/change_image.png'),
+    SIGNOUT :   require('../assets/icons/signout.png'),
+
+    CAMERA :   require('../assets/icons/camera.png'),
+    GALLERY :   require('../assets/icons/gallery.png'),
+    CANCEL :   require('../assets/icons/cross.png'),
 }
