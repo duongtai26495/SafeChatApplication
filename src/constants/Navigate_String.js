@@ -10,5 +10,5 @@ export default ({
     SIGNUP      :   'Signup',
     SIGNIN      :   'Signin',
     AUTHEN      :   'Authen',
-    
+    CHANGEPW    :   'ChangePw'
 })

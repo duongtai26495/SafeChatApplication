@@ -7,7 +7,7 @@ import Colors from '../../assets/colors/Color'
 import NAVI_STRING from '../../constants/Navigate_String'
 import { StackActions } from '@react-navigation/native'
 import SolidBgButton from '../../components/Button/SolidBgButton'
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { getDatabase, ref, push, set } from "firebase/database";
 const Signup = ({ navigation, route }) => {
 
@@ -134,9 +134,18 @@ const Signup = ({ navigation, route }) => {
         "uid": UID,
         "isLogin": true,
       }).then(() => {
-        console.log("Insert new user success! UserID: " + UID)
-        navigation.dispatch(StackActions.replace(NAVI_STRING.PROFILEPAGE))
+        updateProfile(thisUser,{
+          displayName: fName + " " + lName
+        }).then(()=>{
+          console.log("Insert new user success! UserID: " + UID)
+          navigation.dispatch(StackActions.replace(NAVI_STRING.PROFILEPAGE))
+          
         setLoading(false)
+        }).catch((err) => {
+          console.log("An error: " + err)
+          setLoading(false)
+        });
+      
       }).catch((err) => {
         console.log("An error: " + err)
         setLoading(false)
@@ -144,6 +153,8 @@ const Signup = ({ navigation, route }) => {
     }
 
   }
+
+  
 
   return (
     <SafeAreaView>

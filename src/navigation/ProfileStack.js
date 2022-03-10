@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
   Profile,
   Signin,
-  Signup
+  Signup,
+  ChangePw
 } from '../screens'
 
 
@@ -17,6 +18,7 @@ const ProfileStack = () => {
         <Stack.Screen name='ProfilePage' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} />
         <Stack.Screen name='Signin' component={Signin} options={{ headerShown: false, animation: 'slide_from_right' }} />
         <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name='ChangePw' component={ChangePw} options={{ headerShown: false, animation: 'slide_from_right' }} />
       </Stack.Navigator>
 
   )

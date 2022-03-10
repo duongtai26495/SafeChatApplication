@@ -1,7 +1,5 @@
 import {StyleSheet, Dimensions } from 'react-native'
-import React from 'react'
 import Colors from '../colors/Color'
-import Color from '../colors/Color'
 const width = Dimensions.get('screen').width
 const main_styles = StyleSheet.create({
     container:{
@@ -57,7 +55,8 @@ const main_styles = StyleSheet.create({
       tvNavigation:{
         color:Colors.DARK,
         alignSelf:'flex-end'
-      }
+      },
+
 })
 
 export default main_styles

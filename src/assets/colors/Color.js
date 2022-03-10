@@ -1,5 +1,6 @@
 export default {
     PRIMARY     :   'rgba(241,226,204,1)',
+    PRIMARY_HEX :   '#f1e2cc',
     SECONDARY   :   'rgba(0,0,0,1)',
     DARK        :   'rgba(16,16,16,1)',
     LIGHT       :   'rgba(240,240,240,1)',
