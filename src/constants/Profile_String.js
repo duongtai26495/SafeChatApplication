@@ -6,6 +6,7 @@ export default {
 
        CHANGEPWTITLE: 'New password',
        CONFIRMOLDPW: 'Confirm your password',
+       ENTERDESC     :      'Enter describe yourself',
 
        OLDPW: 'Enter old your password',
        ABOUT: 'About',

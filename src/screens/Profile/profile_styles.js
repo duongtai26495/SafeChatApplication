@@ -161,6 +161,31 @@ const profile_styles = StyleSheet.create({
         width:20,
         height:20,
         marginStart:10,
+    },
+    boxDetailProfile:{
+        marginBottom:10,
+        width:widthComponent,
+        borderRadius:10,
+        borderWidth:1,
+        backgroundColor:Colors.WHITE,
+        borderColor:Colors.PRIMARY,
+        elevation:3,
+        shadowColor:Colors.DARK,
+        padding:15,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    textDetail:{
+        color:Colors.BLACK_TRANSP_6,
+        fontSize:15,
+    },
+    inputDetail:{
+        flex:1,
+        color:Colors.DARK,
+        alignContent:'flex-start',
+        backgroundColor:Colors.BLACK_TRANSP_2,
+        padding:10,
+        borderRadius:5,
     }
 
 })

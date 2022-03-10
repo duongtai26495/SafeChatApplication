@@ -10,20 +10,21 @@ import Colors from '../../assets/colors/Color'
 import Authen_String from '../../constants/Authen_String'
 import NAVI_STRING from '../../constants/Navigate_String'
 import ImagePicker from 'react-native-image-crop-picker'
+import { getDatabase, update, ref as ref_database, onValue } from "firebase/database";
 import { StackActions } from '@react-navigation/native'
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref as ref_storage, uploadBytes, getDownloadURL } from "firebase/storage";
 import Icons_Source_Url from '../../constants/Icons_Source_Url'
 const Profile = ({ navigation, route }) => {
 
-  
+
   useEffect(() => {
     checkUserLogin()
-    return (()=>{
+    return (() => {
       setFileImage(null)
     })
   }, [isLoading, isSavePhoto])
 
-  
+
   const auth = getAuth()
 
   const [displayName, setDisplayName] = useState("USER_DISPLAY_NAME")
@@ -31,13 +32,15 @@ const Profile = ({ navigation, route }) => {
 
   const [selectImageUrl, setSelectImageUrl] = useState()
   const [fileImage, setFileImage] = useState()
-  const [userID, setUserID] = useState()  
-  const [photoUrl, setPhotoUrl ] = useState()
+  const [userID, setUserID] = useState()
+  const [photoUrl, setPhotoUrl] = useState()
+  const [detailProfile, setDetailProfile] = useState("Press to update describe yourself")
 
   const [editNameState, setEditNameState] = useState(false)
   const [editImageState, setEditImageState] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isSavePhoto, setSavePhoto] = useState(false)
+  const [editDetail, setEditDetail] = useState(false)
 
   const showToast = msg => {
     ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -49,6 +52,10 @@ const Profile = ({ navigation, route }) => {
 
   const toggleChangePicture = () => {
     setEditImageState(previousState => !previousState)
+  }
+
+  const toggleChangeDetail = () => {
+    setEditDetail(previousState => !previousState)
   }
 
   const checkUserLogin = () => {
@@ -96,6 +103,13 @@ const Profile = ({ navigation, route }) => {
       setUserID(userid)
       setPhotoUrl(photoUrl)
       setLoading(false)
+
+      const db = getDatabase()
+      const ref = ref_database(db, "Users/Info/"+userid+"/profileDescrible")
+      onValue(ref, (snapshot)=>{
+        const data = snapshot.val()
+        setDetailProfile(data)
+      })
     }
   }
 
@@ -137,8 +151,8 @@ const Profile = ({ navigation, route }) => {
         <View>
           <Image source={{ uri: selectImageUrl }} style={profile_styles.imageSelected} />
 
-          <TouchableOpacity onPress={() => { uploadNewPhoto() }} style={{...profile_styles.buttonChoosePhoto,backgroundColor:Colors.SECONDARY}}>
-            <Text style={{...profile_styles.titleButtonChoosePhoto,color:Colors.LIGHT}}>{Profile_String.UPLOADTHISPHOTO}</Text>
+          <TouchableOpacity onPress={() => { uploadNewPhoto() }} style={{ ...profile_styles.buttonChoosePhoto, backgroundColor: Colors.SECONDARY }}>
+            <Text style={{ ...profile_styles.titleButtonChoosePhoto, color: Colors.LIGHT }}>{Profile_String.UPLOADTHISPHOTO}</Text>
           </TouchableOpacity>
         </View>
       )
@@ -240,8 +254,8 @@ const Profile = ({ navigation, route }) => {
       xhr.open("GET", uri, true);
       xhr.send(null);
     });
-  
-    const fileRef = ref(getStorage(), "ProfileImage/" + userID + "/" + userID + "_photoUrl");
+
+    const fileRef = ref_storage(getStorage(), "ProfileImage/" + userID + "/" + userID + "_photoUrl");
     const result = await uploadBytes(fileRef, blob);
 
 
@@ -272,6 +286,52 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const updateDescribleProfile = async () =>{
+    if(detailProfile!==null){
+      setLoading(true)
+      const auth = getAuth()
+      const user = auth.currentUser
+      const userID = user.uid
+      const db = getDatabase();
+     await update(ref_database(db,'Users/Info/' + userID + "/"), {
+        "profileDescrible":detailProfile
+      }).then(()=>{
+        console.log("Update describleSuccess")
+        setLoading(false)
+        setEditDetail(false)
+      })
+    }
+  }
+
+
+  const DetailProfileComponent = () => {
+    if (!editDetail) {
+      return (
+        <View>
+          <Text style={profile_styles.textDetail} >"{detailProfile}"</Text>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{flexDirection:'row'}}>
+          <TextInput 
+          style={profile_styles.inputDetail}
+          placeholderTextColor={Colors.BLACK_TRANSP_6}
+          placeholder={Profile_String.ENTERDESC}
+          multiline={true}
+          numberOfLines={3}
+          value={detailProfile}
+          maxLength={200}
+          onChangeText={(value)=>{setDetailProfile(value)}}/>
+          <TouchableOpacity onPress={()=>{updateDescribleProfile()}}>
+          <Image source={Icons_Source_Url.DONE} style={{...profile_styles.iconEditName}} />
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+  }
+
   return (
     <SafeAreaView style={profile_styles.container}>
 
@@ -286,14 +346,21 @@ const Profile = ({ navigation, route }) => {
 
         <View style={profile_styles.boxProfileMain}>
           <View style={profile_styles.boxProfileImage}>
-            <Image source={ photoUrl !== null ? {uri : photoUrl } : IMAGES.DEFAULT} style={profile_styles.myProfileImage} />
+            <Image source={photoUrl !== null ? { uri: photoUrl } : IMAGES.DEFAULT} style={profile_styles.myProfileImage} />
           </View>
           <View style={profile_styles.boxProfileInfo}>
 
             {EditDisplayNameComponent()}
 
             <Text style={profile_styles.profileMail}>{mailAddr}</Text>
+
           </View>
+          <TouchableOpacity activeOpacity={1} onPress={() => { toggleChangeDetail() }}>
+            <View style={profile_styles.boxDetailProfile}>
+                {DetailProfileComponent()}
+            </View>
+          </TouchableOpacity>
+
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => toggleChangePicture()} style={profile_styles.profileFunctionBox}>
