@@ -154,7 +154,6 @@ const Profile = ({ navigation, route }) => {
     if (editImageState) {
       return (
         <View style={profile_styles.layerChangeImage}>
-
           <ActivityIndicator
             size={40}
             animationDuration={1500}
